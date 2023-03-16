@@ -6,13 +6,13 @@ class PDataBase :  public IDataBase
 {
 private:
 	bool isCashed;
-	IDataBase& dataBase;
+	DataBase dataBase;
 	const std::string localDataBase;
 	std::string dataBasePaht;
 	const std::string getDate() const;
 	void cashToDataBase();
 public:
-	PDataBase(DataBase& database) :dataBase(database),isCashed(false),localDataBase("localTempDatabase.txt"), dataBasePaht("") {}
+	PDataBase() :isCashed(false),localDataBase("localTempDatabase.txt"), dataBasePaht("") {}
 	~PDataBase();
 	void Log(const std::string& message) override;
 	bool IsConnected() { return dataBase.IsConnected(); }

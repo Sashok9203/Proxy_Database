@@ -5,8 +5,7 @@
 
 int main()
 {
-    DataBase dataBase;
-    PDataBase pDataBase(dataBase);
+    PDataBase pDataBase;
     User user(pDataBase);
     for (int i = 0; i < 20; i++)
     {
