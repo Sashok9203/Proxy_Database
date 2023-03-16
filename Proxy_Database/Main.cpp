@@ -16,6 +16,7 @@ int main()
             std::cout << ex.what()<<std::endl;
         }
     }
+    std::cout << " All messages sended to database....";
 }
 
 
