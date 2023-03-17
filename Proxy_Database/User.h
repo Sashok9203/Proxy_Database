@@ -3,9 +3,10 @@
 class User
 {
 private:
-	IDataBase& database;
+	IDataBase* database;
 public:
-	User(IDataBase& database) :database(database) {}
-	void Log(const std::string& dataBasePath, const std::string& message) { database.Connect(dataBasePath); database.Log(message); }
+	User(IDataBase* database) :database(database) {}
+	~User() { delete database; }
+	void Log(const std::string& dataBasePath, const std::string& message) { database->Connect(dataBasePath); database->Log(message); }
 };
 

@@ -5,8 +5,7 @@
 
 int main()
 {
-    PDataBase pDataBase;
-    User user(pDataBase);
+    User user(new PDataBase());
     for (int i = 0; i < 20; i++)
     {
         try{user.Log("database.txt", "Message #" + std::to_string(i+1));}
