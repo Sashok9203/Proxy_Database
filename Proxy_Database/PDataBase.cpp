@@ -19,7 +19,12 @@ void PDataBase::cashToDataBase()
     std::string tmp;
     std::ifstream ifs(localDataBase);
     while (std::getline(ifs, tmp))
-        dataBase.Log(tmp);
+        try{dataBase->Log(tmp);}
+    catch (const std::exception&)
+    {
+        ifs.close();
+        throw;
+    }
     ifs.close();
     std::ofstream ofs(localDataBase);
     ofs.close();
@@ -28,25 +33,37 @@ void PDataBase::cashToDataBase()
 
 PDataBase::~PDataBase()
 {
-    if (isCashed)
+    if (dataBase)
     {
-        while (!IsConnected()) dataBase.Connect(dataBasePaht);
-        cashToDataBase();
+        if (isCashed )
+        {
+            do
+            {
+                try { cashToDataBase(); }
+                catch (const std::exception&)
+                {
+                    dataBase->Connect(dataBasePaht);
+                }
+            } while (isCashed);
+        }
+        delete dataBase;
     }
 }
 
 void PDataBase::Log(const std::string& message)
 {
-    if (IsConnected())
+    if (!dataBase) loadDataBase();
+    std::string dMessage = getDate() + message;
+    try
     {
         if (isCashed) cashToDataBase();
-        dataBase.Log(getDate() + message);
+        dataBase->Log(dMessage);
     }
-    else
+    catch (const std::exception&)
     {
         std::ofstream ofs;
         ofs.open(localDataBase, std::ofstream::app);
-        ofs << getDate() + message << std::endl;
+        ofs << dMessage << std::endl;
         ofs.close();
         isCashed = true;
     }
@@ -54,7 +71,15 @@ void PDataBase::Log(const std::string& message)
 
 void PDataBase::Connect(const std::string& connectionString)
 {
-    dataBase.Connect(connectionString);
-    dataBasePaht = connectionString;
+    if (!dataBase) loadDataBase();
+    try
+    {
+        dataBase->Connect(connectionString);
+        dataBasePaht = connectionString;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cout << ex.what();
+    }
 }
 

@@ -9,7 +9,6 @@ private:
 	bool isConnected;
 public:
 	DataBase();
-	bool IsConnected() { return isConnected; }
 	void Connect(const std::string& connectionString);
 	void Log(const std::string& message);
 };

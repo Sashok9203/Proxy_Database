@@ -10,6 +10,7 @@ void DataBase::Connect(const std::string& connectionString)
 
 void DataBase::Log(const std::string& message)
 {
+	if(!isConnected) throw std::exception(" No connection with database ...");
 	std::ofstream ofs;
 	ofs.open(connectionString, std::ofstream::app);
 	if (!ofs) throw std::exception(" Data base error...");
